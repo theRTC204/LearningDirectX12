@@ -433,3 +433,9 @@ void WaitForFenceValue(ComPtr<ID3D12Fence> fence, uint64_t fenceValue, HANDLE fe
 		::WaitForSingleObject(fenceEvent, static_cast<DWORD>(duration.count()));
 	}
 }
+
+void Flush(ComPtr<ID3D12CommandQueue> commandQueue, ComPtr<ID3D12Fence> fence, uint64_t& fenceValue, HANDLE fenceEvent)
+{
+	uint64_t fenceValueForSignal = Signal(commandQueue, fence, fenceValue);
+	WaitForFenceValue(fence, fenceValueForSignal, fenceEvent);
+}
