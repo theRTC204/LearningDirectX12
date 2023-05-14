@@ -12,6 +12,7 @@ project "LearningDirectX12"
     objdir ("../../temp/obj" .. _ACTION)
     location ("../../temp/solutions/" .. _ACTION .. "/LearningDirectX12")
 
+    includedirs { "../../extern/**" }
     files { "../../src/**.h", "../../src/**.cpp" }
 
     filter { "configurations:Debug" }
