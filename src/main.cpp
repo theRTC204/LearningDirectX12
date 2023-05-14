@@ -376,3 +376,12 @@ void UpdateRenderTargetViews(ComPtr<ID3D12Device2> device, ComPtr<IDXGISwapChain
 		rtvHandle.Offset(rtvDescriptorSize);
 	}
 }
+
+ComPtr<ID3D12CommandAllocator> CreateCommandAllocator(ComPtr<ID3D12Device> device, D3D12_COMMAND_LIST_TYPE type)
+{
+	ComPtr<ID3D12CommandAllocator> commandAllocator;
+
+	ThrowIfFailed(device->CreateCommandAllocator(type, IID_PPV_ARGS(&commandAllocator)));
+
+	return commandAllocator;
+}
