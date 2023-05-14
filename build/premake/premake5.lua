@@ -16,7 +16,7 @@ project "LearningDirectX12"
     files { "../../src/**.h", "../../src/**.cpp" }
 
     filter { "configurations:Debug" }
-        defines { "DEBUG" }
+        defines { "_DEBUG" }
         symbols "On"
 
     filter { "configurations:Release" }
