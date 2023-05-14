@@ -415,3 +415,12 @@ HANDLE CreateEventHandle()
 
 	return fenceEvent;
 }
+
+uint64_t Signal(ComPtr<ID3D12CommandQueue> commandQueue, ComPtr<ID3D12Fence> fence, uint64_t& fenceValue)
+{
+	uint64_t fenceValueForSignal = ++fenceValue;
+
+	ThrowIfFailed(commandQueue->Signal(fence.Get(), fenceValueForSignal));
+
+	return fenceValueForSignal;
+}
