@@ -405,3 +405,13 @@ ComPtr<ID3D12Fence> CreateFence(ComPtr<ID3D12Device> device)
 
 	return fence;
 }
+
+HANDLE CreateEventHandle()
+{
+	HANDLE fenceEvent;
+
+	fenceEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);
+	assert(fenceEvent && "Failed to create fence event.");
+
+	return fenceEvent;
+}
