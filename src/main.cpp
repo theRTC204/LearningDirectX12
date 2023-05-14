@@ -81,3 +81,28 @@ bool g_FullScreen = false;
 
 // Window callback function.
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+
+void ParseCommandLineArguments()
+{
+	int argc;
+	wchar_t** argv = ::CommandLineToArgvW(::GetCommandLineW(), &argc);
+
+	for (size_t i = 0; i < argc; ++i)
+	{
+		if (::wcscmp(argv[i], L"-w") == 0 || ::wcscmp(argv[i], L"--width") == 0)
+		{
+			g_ClientWidth = ::wcstol(argv[++i], nullptr, 10);
+		}
+		if (::wcscmp(argv[i], L"-h") == 0 || ::wcscmp(argv[i], L"--height") == 0)
+		{
+			g_ClientHeight = ::wcstol(argv[++i], nullptr, 10);
+		}
+		if (::wcscmp(argv[i], L"-warp") == 0 || ::wcscmp(argv[i], L"--warp") == 0)
+		{
+			g_UseWarp = true;
+		}
+	}
+
+	// Free memory allocated by CommandLineToArgvW
+	::LocalFree(argv);
+}
