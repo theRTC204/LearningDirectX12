@@ -118,4 +118,25 @@ void EnableDebugLayer()
 #endif
 }
 
+void RegisterWindowClass(HINSTANCE hInst, const wchar_t* windowClassName)
+{
+	// Register a window class for creating our render window with.
+	WNDCLASSEXW windowClass = {};
 
+	windowClass.cbSize = sizeof(WNDCLASSEX);
+	windowClass.style = CS_HREDRAW | CS_VREDRAW;
+	windowClass.lpfnWndProc = &WndProc;
+	windowClass.cbClsExtra = 0;
+	windowClass.cbWndExtra = 0;
+	windowClass.hInstance = hInst;
+	windowClass.hIcon = ::LoadIcon(hInst, NULL);
+	windowClass.hCursor = ::LoadCursor(NULL, IDC_ARROW);
+	windowClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+	windowClass.lpszMenuName = NULL;
+	windowClass.lpszClassName = windowClassName;
+	windowClass.hIconSm = ::LoadIcon(hInst, NULL);
+
+	static ATOM atom = ::RegisterClassExW(&windowClass);
+
+	assert(atom > 0);
+}
