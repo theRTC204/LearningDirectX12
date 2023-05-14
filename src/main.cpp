@@ -396,3 +396,12 @@ ComPtr<ID3D12GraphicsCommandList> CreateCommandList(ComPtr<ID3D12Device2> device
 
 	return commandList;
 }
+
+ComPtr<ID3D12Fence> CreateFence(ComPtr<ID3D12Device> device)
+{
+	ComPtr<ID3D12Fence> fence;
+
+	ThrowIfFailed(device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence)));
+
+	return fence;
+}
