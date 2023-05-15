@@ -5,7 +5,7 @@ workspace "LearningDirectX12"
     location ("../../temp/solutions/" .. _ACTION)
 
 project "LearningDirectX12"
-    kind "ConsoleApp"
+    kind "WindowedApp"
     language "C++"
 
     targetdir ("../../temp/bin" .. _ACTION)
