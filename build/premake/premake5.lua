@@ -8,8 +8,8 @@ project "LearningDirectX12"
     kind "WindowedApp"
     language "C++"
 
-    targetdir ("../../temp/bin" .. _ACTION)
-    objdir ("../../temp/obj" .. _ACTION)
+    targetdir ("../../temp/bin/" .. _ACTION)
+    objdir ("../../temp/obj/" .. _ACTION)
     location ("../../temp/solutions/" .. _ACTION .. "/LearningDirectX12")
 
     includedirs { "../../extern/**" }
