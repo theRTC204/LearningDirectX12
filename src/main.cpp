@@ -77,7 +77,7 @@ bool g_TearingSupported = false;
 
 // By default, use windowed mode.
 // Can be toggled with the Alt+Enter or F11
-bool g_FullScreen = false;
+bool g_Fullscreen = false;
 
 // Window callback function.
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -541,5 +541,53 @@ void Resize(uint32_t width, uint32_t height)
 		g_CurrentBackBufferIndex = g_SwapChain->GetCurrentBackBufferIndex();
 
 		UpdateRenderTargetViews(g_Device, g_SwapChain, g_RTVDescriptorHeap);
+	}
+}
+
+void SetFullscreen(bool fullscreen)
+{
+	if (g_Fullscreen != fullscreen)
+	{
+		g_Fullscreen = fullscreen;
+
+		if (g_Fullscreen) // Switching to fullscreen.
+		{
+			// Store the current window dimensions so they can be restored when switching out of fullscreen state.
+			::GetWindowRect(g_hWnd, &g_WindowRect);
+
+			// Set the window style to a borderless window so the client area fills the entire screen.
+			UINT windowStyle = WS_OVERLAPPEDWINDOW & ~(WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX);
+			::SetWindowLongW(g_hWnd, GWL_STYLE, windowStyle);
+
+			// Query the name of the nearest display device for the window. This is required to set the fullscreen
+			// dimensions of the window when using a multi-monitor setup.
+			HMONITOR hMonitor = ::MonitorFromWindow(g_hWnd, MONITOR_DEFAULTTONEAREST);
+			MONITORINFOEX monitorInfo = {};
+			monitorInfo.cbSize = sizeof(MONITORINFOEX);
+			::GetMonitorInfo(hMonitor, &monitorInfo);
+
+			::SetWindowPos(g_hWnd, HWND_TOP,
+				monitorInfo.rcMonitor.left,
+				monitorInfo.rcMonitor.top,
+				monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left,
+				monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top,
+				SWP_FRAMECHANGED | SWP_NOACTIVATE);
+
+			::ShowWindow(g_hWnd, SW_MAXIMIZE);
+		}
+		else
+		{
+			// Restore all the window decorators.
+			::SetWindowLong(g_hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
+
+			::SetWindowPos(g_hWnd, HWND_NOTOPMOST,
+				g_WindowRect.left,
+				g_WindowRect.top,
+				g_WindowRect.right - g_WindowRect.left,
+				g_WindowRect.bottom - g_WindowRect.top,
+				SWP_FRAMECHANGED | SWP_NOACTIVATE);
+
+			::ShowWindow(g_hWnd, SW_NORMAL);
+		}
 	}
 }
