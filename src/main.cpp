@@ -513,3 +513,33 @@ void Render()
 		WaitForFenceValue(g_Fence, g_FrameFenceValues[g_CurrentBackBufferIndex], g_FenceEvent);
 	}
 }
+
+void Resize(uint32_t width, uint32_t height)
+{
+	if (g_ClientWidth != width || g_ClientHeight != height)
+	{
+		// Don't allow 0 size swap chain back buffers;
+		g_ClientWidth = std::max(1u, width);
+		g_ClientHeight = std::max(1u, height);
+
+		// Flush the GPU queue to make sure the swap chain's back buffers are not being referenced
+		// by an in-flight command list.
+		Flush(g_CommandQueue, g_Fence, g_FenceValue, g_FenceEvent);
+
+		for (int i = 0; i < g_NumFrames; ++i)
+		{
+			// Any references to the back buffers must be released before the swap chain can be resized.
+			g_BackBuffers[i].Reset();
+			g_FrameFenceValues[i] = g_FrameFenceValues[g_CurrentBackBufferIndex];
+		}
+
+		DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
+		ThrowIfFailed(g_SwapChain->GetDesc(&swapChainDesc));
+		ThrowIfFailed(g_SwapChain->ResizeBuffers(g_NumFrames, g_ClientWidth, g_ClientHeight,
+			swapChainDesc.BufferDesc.Format, swapChainDesc.Flags));
+
+		g_CurrentBackBufferIndex = g_SwapChain->GetCurrentBackBufferIndex();
+
+		UpdateRenderTargetViews(g_Device, g_SwapChain, g_RTVDescriptorHeap);
+	}
+}
