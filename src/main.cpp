@@ -21,6 +21,7 @@
 using namespace Microsoft::WRL;
 
 // DirectX 12 specific headers.
+#include <d3dcommon.h>
 #include <d3d12.h>
 #include <dxgi1_6.h>
 #include <d3dcompiler.h>
