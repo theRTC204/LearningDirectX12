@@ -12,6 +12,7 @@ project "LearningDirectX12"
     objdir ("../../temp/obj/" .. _ACTION)
     location ("../../temp/solutions/" .. _ACTION .. "/LearningDirectX12")
 
+    links { "d3d12", "dxgi", "dxguid" }
     includedirs { "../../extern/**" }
     files { "../../src/**.h", "../../src/**.cpp" }
 
